@@ -6,23 +6,26 @@ app.config(function ($mdThemingProvider) {
         .accentPalette('orange');
 });
 
-app.controller('chatController', function ($scope) {
-    $scope.messages = [{
+app.controller('chatController', function ($scope, $sce) {
+    $scope.messages = [];
+    $scope.trust = $sce.trustAsHtml;
 
-            'sender': 'User',
-            'text': 'hello'
-},
-        {
-            'sender': 'BOT',
-            'text': 'hey! how r u?'
-},
-        {
-            'sender': 'USER',
-            'text': 'gud how r u?'
-},
-        {
-            'sender': 'BOT',
-            'text': 'fine'
-}
-];
+    var exampleSocket = new WebSocket('ws://localhost:9000/chatSocket');
+
+    exampleSocket.onmessage = function (event) {
+        var jsonData = JSON.parse(event.data);
+        jsonData.time = new Date()
+            .toLocaleTimeString();
+
+        $scope.messages.push(jsonData);
+
+        $scope.$apply();
+        console.log(jsonData);
+    };
+
+    $scope.sendMessage = function () {
+        exampleSocket.send($scope.usermessage);
+        $scope.usermessage = '';
+    };
+
 });

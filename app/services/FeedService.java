@@ -16,9 +16,9 @@ public class FeedService {
 
         FeedResponse feedResponse = new FeedResponse();
         try {
-            WSRequest feedRequest = WS.url("https://news.google.com/news?q=CCL&output=rss");
+            WSRequest feedRequest = WS.url("https://news.google.com/news");
             CompletionStage<WSResponse> responsePromise = feedRequest
-                    .setQueryParameter("q", "query")
+                    .setQueryParameter("q", query)
                     .setQueryParameter("output", "rss")
                     .get();
             Document response = responsePromise.thenApply(WSResponse::asXml).toCompletableFuture().get();
