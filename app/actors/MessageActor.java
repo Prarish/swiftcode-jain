@@ -47,7 +47,6 @@ public class MessageActor extends UntypedActor {
             messageObject.feedResponse = feedResponse;
             messageObject.sender = BOT;
             out.tell(objectMapper.writeValueAsString(messageObject), self());
-
         }
 
     }
